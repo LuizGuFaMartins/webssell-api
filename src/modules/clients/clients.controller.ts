@@ -1,6 +1,8 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
+import { ApiBody } from '@nestjs/swagger';
 import { ClientsService } from './clients.service';
 import { ClientEntity } from './database/clients.entity';
+import { ClientDTO } from './dtos/clients.dto';
 
 @Controller('clients')
 export class ClientsController {
@@ -12,7 +14,8 @@ export class ClientsController {
   }
 
   @Post()
-  async create(@Body() client: ClientEntity): Promise<ClientEntity[]> {
-    return await this.clientsService.findAll();
+  @ApiBody({ type: ClientDTO })
+  async create(@Body() client: ClientDTO): Promise<ClientEntity> {
+    return await this.clientsService.create(client);
   }
 }
