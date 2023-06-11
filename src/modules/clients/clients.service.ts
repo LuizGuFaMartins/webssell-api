@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ClientEntity } from './database/clients.entity';
+import { ClientInputDTO } from './dtos/clientsInput.dto';
 
 @Injectable()
 export class ClientsService {
@@ -14,7 +15,9 @@ export class ClientsService {
     return await this.clientRepository.find();
   }
 
-  async create(client: ClientEntity): Promise<ClientEntity> {
-    return await this.clientRepository.save(client);
+  async create(client: ClientInputDTO): Promise<ClientEntity> {
+    const entity: ClientEntity = new ClientEntity();
+    entity.clientName = client.clientName;
+    return await this.clientRepository.save(entity);
   }
 }

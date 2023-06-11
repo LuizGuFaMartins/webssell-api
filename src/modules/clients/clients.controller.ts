@@ -3,6 +3,7 @@ import { ApiBody } from '@nestjs/swagger';
 import { ClientsService } from './clients.service';
 import { ClientEntity } from './database/clients.entity';
 import { ClientDTO } from './dtos/clients.dto';
+import { ClientInputDTO } from './dtos/clientsInput.dto';
 
 @Controller('clients')
 export class ClientsController {
@@ -14,8 +15,8 @@ export class ClientsController {
   }
 
   @Post()
-  @ApiBody({ type: ClientDTO })
-  async create(@Body() client: ClientDTO): Promise<ClientEntity> {
+  @ApiBody({ type: ClientInputDTO })
+  async create(@Body() client: ClientInputDTO): Promise<ClientEntity> {
     return await this.clientsService.create(client);
   }
 }

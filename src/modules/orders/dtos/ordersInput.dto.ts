@@ -1,16 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ClientDTO } from 'src/modules/clients/dtos/clients.dto';
-import { ItemDTO } from 'src/modules/itens/dtos/itens.dto';
 
-export class OrderDTO {
+export class OrderInputDTO {
   @ApiProperty()
   orderId: number;
 
   @ApiProperty()
-  client: ClientDTO;
+  clientId: number;
 
   @ApiProperty()
-  itens: ItemDTO[];
+  itensIds: number[];
 
   @ApiProperty()
   orderObservation: string;

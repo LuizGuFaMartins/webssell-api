@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiBody } from '@nestjs/swagger';
-import { OrderDTO } from './dtos/orders.dto';
-import { OrdersService } from './orders.service';
 import { OrderEntity } from './database/orders.entity';
+import { OrderInputDTO } from './dtos/ordersInput.dto';
+import { OrdersService } from './orders.service';
 
 @Controller('orders')
 export class OrdersController {
@@ -14,8 +14,8 @@ export class OrdersController {
   }
 
   @Post()
-  @ApiBody({ type: OrderDTO })
-  async create(@Body() order: OrderDTO): Promise<OrderEntity> {
+  @ApiBody({ type: OrderInputDTO })
+  async create(@Body() order: OrderInputDTO): Promise<OrderEntity> {
     return await this.ordersService.create(order);
   }
 }

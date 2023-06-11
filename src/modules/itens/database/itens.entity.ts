@@ -3,6 +3,7 @@ import { ProductEntity } from 'src/modules/products/database/products.entity';
 import {
   Column,
   Entity,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn
 } from 'typeorm';
@@ -18,7 +19,7 @@ export class ItemEntity {
   @Column()
   itemPrice: number;
 
-  @OneToOne(() => OrderEntity, (order) => order.orderId)
+  @ManyToOne(() => OrderEntity, (order) => order.orderId)
   order: OrderEntity;
 
   @OneToOne(() => ProductEntity, (product) => product.productId)
