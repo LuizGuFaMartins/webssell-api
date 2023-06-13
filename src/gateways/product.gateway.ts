@@ -9,14 +9,13 @@ import {
 } from '@nestjs/websockets';
 import { Server } from 'socket.io';
 import { ProductInputDTO } from 'src/modules/products/dtos/productsInput.dto';
-import { ProductsService } from './../modules/products/products.service';
+import { ProductsService } from '../modules/products/products.service';
 
 @WebSocketGateway()
 export class ProductGateway
   implements OnModuleInit, OnGatewayConnection, OnGatewayDisconnect
 {
-  @WebSocketServer()
-  private server: Server;
+  @WebSocketServer() private server: Server;
   private logger: Logger = new Logger('Gateway');
 
   constructor(private readonly productsService: ProductsService) {}
