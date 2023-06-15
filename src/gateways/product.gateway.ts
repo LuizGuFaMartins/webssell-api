@@ -20,7 +20,7 @@ export class ProductGateway
 
   constructor(private readonly productsService: ProductsService) {}
 
-  handleConnection(client: any, ...args: any[]) {
+  handleConnection() {
     this.logger.log('Connected to products gateway');
   }
 
@@ -33,7 +33,7 @@ export class ProductGateway
     });
   }
 
-  handleDisconnect(client: any) {
+  handleDisconnect() {
     this.logger.log('Disconnected from products gateway');
   }
 
