@@ -16,8 +16,15 @@ export class ProductGateway extends AbstractGateway<ProductEntity> {
     this.setGetMethodName('getProducts');
   }
 
+  @SubscribeMessage('listProducts')
+  list() {
+    this.service.findAll().then((itens) => {
+      this.emitGetEvent(itens);
+    });
+  }
+
   @SubscribeMessage('createProduct')
-  onCreateProduct(@MessageBody() product: ProductInputDTO) {
+  create(@MessageBody() product: ProductInputDTO) {
     this.productsService.create(product);
     this.productsService.findAll().then((products) => {
       this.emitGetEvent(products);

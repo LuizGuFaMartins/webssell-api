@@ -16,8 +16,15 @@ export class ItemGateway extends AbstractGateway<ItemEntity> {
     this.setGetMethodName('getItens');
   }
 
+  @SubscribeMessage('listItens')
+  list() {
+    this.service.findAll().then((itens) => {
+      this.emitGetEvent(itens);
+    });
+  }
+
   @SubscribeMessage('createItem')
-  onCreateProduct(@MessageBody() item: ItemInputDTO) {
+  create(@MessageBody() item: ItemInputDTO) {
     this.service.create(item);
     this.service.findAll().then((itens) => {
       this.emitGetEvent(itens);
