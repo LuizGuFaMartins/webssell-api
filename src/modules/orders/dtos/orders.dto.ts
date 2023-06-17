@@ -13,9 +13,6 @@ export class OrderDTO {
   itens: ItemDTO[];
 
   @ApiProperty()
-  orderObservation: string;
-
-  @ApiProperty()
   orderTotalPrice: number;
 
   @ApiProperty()

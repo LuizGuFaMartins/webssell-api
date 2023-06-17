@@ -7,6 +7,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { OrderStatus } from '../enums/order-status.enum';
 
 @Entity()
 export class OrderEntity {
@@ -22,6 +23,9 @@ export class OrderEntity {
   @Column()
   orderTotalPrice: number;
 
-  @Column()
+  @Column({
+    enum: OrderStatus,
+    default: OrderStatus.OPEN,
+  })
   orderStatus: string;
 }

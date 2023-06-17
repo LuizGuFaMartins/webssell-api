@@ -47,13 +47,4 @@ export class AbstractGateway<T>
   emitGetEvent(object) {
     this.server.emit(this.getMethodName, object);
   }
-
-  // @SubscribeMessage('createProduct')
-  // onCreateProduct(@MessageBody() product: ProductInputDTO) {
-  //   this.service.create(product);
-  //   this.service.findAll().then((products) => {
-  //     this.server.emit(this.getMethodName, products);
-  //   });
-  //   this.logger.debug(product);
-  // }
 }

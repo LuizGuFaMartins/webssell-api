@@ -11,9 +11,6 @@ export class OrderInputDTO {
   itensIds: number[];
 
   @ApiProperty()
-  orderObservation: string;
-
-  @ApiProperty()
   orderTotalPrice: number;
 
   @ApiProperty()

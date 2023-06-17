@@ -13,7 +13,7 @@ export class ProductGateway extends AbstractGateway<ProductEntity> {
   constructor(private readonly productsService: ProductsService) {
     super(productsService);
     this.setEntityName('Product');
-    this.setGetMethodName('getProducts');
+    this.setGetMethodName('refreshProductsList');
   }
 
   @SubscribeMessage('listProducts')

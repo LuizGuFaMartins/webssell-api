@@ -13,7 +13,7 @@ export class ItemGateway extends AbstractGateway<ItemEntity> {
   constructor(private readonly itensService: ItensService) {
     super(itensService);
     this.setEntityName('Item');
-    this.setGetMethodName('getItens');
+    this.setGetMethodName('refreshItensList');
   }
 
   @SubscribeMessage('listItens')
