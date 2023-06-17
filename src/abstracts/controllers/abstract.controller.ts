@@ -4,7 +4,7 @@ import { AbstractService } from '../services/abstract.service';
 @Controller()
 export abstract class AbstractController<T> {
   private identifierName;
-  constructor(protected service: AbstractService<T>) {}
+  constructor(public service: AbstractService<T>) {}
 
   setIdentifierName(identifierName) {
     this.identifierName = identifierName;
@@ -27,4 +27,16 @@ export abstract class AbstractController<T> {
 
   abstract create(createDto: any): Promise<T>;
   abstract update(id: number, updateDto: any): Promise<T>;
+
+  // @Post()
+  // @ApiBody(this.getApiBodyOptions()) // Use o método para definir as opções de documentação da API
+  // async create(@Body() createDto: any): Promise<T> {
+  //   return this.service.create(createDto);
+  // }
+
+  // @Put(':id')
+  // @ApiBody(this.getApiBodyOptions()) // Use o método para definir as opções de documentação da API
+  // async update(@Param('id') id: number, @Body() updateDto: any): Promise<T> {
+  //   return this.service.update(id, updateDto);
+  // }
 }
