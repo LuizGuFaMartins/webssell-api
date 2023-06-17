@@ -3,6 +3,7 @@ import { ItemEntity } from 'src/modules/itens/database/itens.entity';
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -14,13 +15,13 @@ export class OrderEntity {
   @PrimaryGeneratedColumn()
   orderId: number;
 
-  @ManyToOne(() => ClientEntity, (client) => client.clientId)
-  client: ClientEntity;
+  @Column({ nullable: true })
+  clientId: number;
 
-  @OneToMany(() => ItemEntity, (order) => order.itemId)
+  @OneToMany(() => OrderEntity, (order) => order.itens)
   itens: ItemEntity[];
 
-  @Column()
+  @Column({ nullable: true })
   orderTotalPrice: number;
 
   @Column({
@@ -28,4 +29,8 @@ export class OrderEntity {
     default: OrderStatus.OPEN,
   })
   orderStatus: string;
+
+  @ManyToOne(() => ClientEntity, (client) => client.orders)
+  @JoinColumn({ name: 'clientId', referencedColumnName: 'clientId' })
+  client: ClientEntity;
 }

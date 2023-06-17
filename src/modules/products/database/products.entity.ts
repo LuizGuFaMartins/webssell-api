@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { ItemEntity } from 'src/modules/itens/database/itens.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class ProductEntity {
@@ -13,4 +14,7 @@ export class ProductEntity {
 
   @Column()
   productCode: string;
+
+  @OneToMany(() => ItemEntity, (item) => item.productId)
+  itens: ItemEntity[];
 }

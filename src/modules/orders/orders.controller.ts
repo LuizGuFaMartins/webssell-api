@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { AbstractController } from 'src/abstracts/controllers/abstract.controller';
 import { OrderEntity } from './database/orders.entity';
@@ -26,5 +26,10 @@ export class OrdersController extends AbstractController<OrderEntity> {
     @Body() order: OrderInputDTO,
   ): Promise<OrderEntity> {
     return await this.service.update(id, order);
+  }
+
+  @Get('/find-per-client/:id')
+  async findPerClient(@Param('id') id: number): Promise<OrderEntity[]> {
+    return this.ordersService.findPerClientId(id);
   }
 }

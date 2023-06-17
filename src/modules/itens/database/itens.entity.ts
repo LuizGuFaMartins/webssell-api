@@ -3,8 +3,8 @@ import { ProductEntity } from 'src/modules/products/database/products.entity';
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -19,9 +19,17 @@ export class ItemEntity {
   @Column()
   itemQuantity: number;
 
-  @OneToOne(() => ProductEntity, (product) => product.productId)
+  @Column()
+  productId: number;
+
+  @Column()
+  orderId: number;
+
+  @ManyToOne(() => ProductEntity, (product) => product.itens)
+  @JoinColumn({ name: 'productId', referencedColumnName: 'productId' })
   product: ProductEntity;
 
-  @ManyToOne(() => OrderEntity, (order) => order.orderId)
+  @ManyToOne(() => OrderEntity, (order) => order.itens)
+  @JoinColumn({ name: 'orderId', referencedColumnName: 'orderId' })
   order: OrderEntity;
 }

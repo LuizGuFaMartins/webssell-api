@@ -2,9 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class OrderInputDTO {
   @ApiProperty()
-  orderId: number;
-
-  @ApiProperty()
   clientId: number;
 
   @ApiProperty()

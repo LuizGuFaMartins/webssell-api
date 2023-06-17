@@ -9,6 +9,6 @@ export class ClientEntity {
   @Column()
   clientName: string;
 
-  @OneToMany(() => OrderEntity, (order) => order.orderId)
+  @OneToMany(() => OrderEntity, (order) => order.clientId)
   orders: OrderEntity[];
 }
