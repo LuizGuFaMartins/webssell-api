@@ -7,10 +7,10 @@ export class ItemDTO {
   itemId: number;
 
   @ApiProperty()
-  itemQuantity: number;
+  itemCode: string;
 
   @ApiProperty()
-  itemPrice: number;
+  itemQuantity: number;
 
   @ApiProperty()
   order: OrderDTO;

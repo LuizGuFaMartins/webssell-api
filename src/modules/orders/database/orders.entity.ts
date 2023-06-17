@@ -20,9 +20,6 @@ export class OrderEntity {
   itens: ItemEntity[];
 
   @Column()
-  orderObservation: string;
-
-  @Column()
   orderTotalPrice: number;
 
   @Column()

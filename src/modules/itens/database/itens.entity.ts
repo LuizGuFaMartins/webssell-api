@@ -5,7 +5,7 @@ import {
   Entity,
   ManyToOne,
   OneToOne,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity()
@@ -14,14 +14,14 @@ export class ItemEntity {
   itemId: number;
 
   @Column()
-  itemQuantity: number;
+  itemCode: string;
 
   @Column()
-  itemPrice: number;
-
-  @ManyToOne(() => OrderEntity, (order) => order.orderId)
-  order: OrderEntity;
+  itemQuantity: number;
 
   @OneToOne(() => ProductEntity, (product) => product.productId)
   product: ProductEntity;
+
+  @ManyToOne(() => OrderEntity, (order) => order.orderId)
+  order: OrderEntity;
 }

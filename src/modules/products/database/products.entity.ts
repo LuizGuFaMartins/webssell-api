@@ -9,11 +9,8 @@ export class ProductEntity {
   productName: string;
 
   @Column()
-  productDescription: string;
-
-  @Column()
   productPrice: number;
 
   @Column()
-  productQuantity: number;
+  productCode: string;
 }

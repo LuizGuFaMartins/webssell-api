@@ -5,11 +5,8 @@ export class ProductInputDTO {
   productName: string;
 
   @ApiProperty()
-  productDescription: string;
-
-  @ApiProperty()
   productPrice: number;
 
   @ApiProperty()
-  productQuantity: number;
+  productCode: string;
 }
