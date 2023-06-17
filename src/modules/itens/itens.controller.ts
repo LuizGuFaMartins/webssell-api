@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Put } from '@nestjs/common';
+import { Body, Controller, Param, Post, Put } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { AbstractController } from 'src/abstracts/controllers/abstract.controller';
 import { ItemEntity } from './database/itens.entity';
@@ -15,13 +15,16 @@ export class ItensController extends AbstractController<ItemEntity> {
 
   @Post()
   @ApiBody({ type: ItemInputDTO })
-  async create(@Body() item: ItemInputDTO): Promise<ItemEntity> {
+  async create(@Body() item: ItemInputDTO): Promise<ItemEntity[]> {
     return await this.service.create(item);
   }
 
   @Put()
   @ApiBody({ type: ItemInputDTO })
-  update(id: number, item: ItemInputDTO): Promise<ItemEntity> {
-    return this.service.update(id, item);
+  async update(
+    @Param('id') id: number,
+    @Body() item: ItemInputDTO,
+  ): Promise<ItemEntity> {
+    return await this.service.update(id, item);
   }
 }

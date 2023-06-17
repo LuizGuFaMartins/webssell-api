@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AbstractService } from 'src/abstracts/services/abstract.service';
 import { Repository } from 'typeorm';
 import { ClientEntity } from './database/clients.entity';
-import { ClientInputDTO } from './dtos/clientsInput.dto';
 
 @Injectable()
 export class ClientsService extends AbstractService<ClientEntity> {
@@ -13,5 +12,11 @@ export class ClientsService extends AbstractService<ClientEntity> {
   ) {
     super();
     this.setRepository(clientRepository);
+  }
+
+  async findOne(id: any): Promise<ClientEntity> {
+    return this.clientRepository.findOne({
+      where: { clientId: id },
+    });
   }
 }

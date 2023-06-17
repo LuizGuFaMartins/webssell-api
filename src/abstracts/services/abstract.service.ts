@@ -13,17 +13,16 @@ export abstract class AbstractService<T> {
     return this.repository.find();
   }
 
-  async findOne(id: any): Promise<T> {
-    return this.repository.findOne(id);
-  }
+  abstract findOne(id: any): Promise<T>;
 
-  async create(createDto: any): Promise<T> {
-    const entity = this.repository.create(createDto);
-    return this.repository.save(entity)[0];
+  async create(createDto: any): Promise<T[]> {
+    const entity = await this.repository.create(createDto);
+    const savedEntity = await this.repository.save(entity);
+    return savedEntity;
   }
 
   async update(id: any, updateDto: any): Promise<T> {
-    const entity = await this.repository.findOne(id);
+    const entity = await this.findOne(id);
     if (!entity) {
       throw new NotFoundException(`Entity with id ${id} not found`);
     }

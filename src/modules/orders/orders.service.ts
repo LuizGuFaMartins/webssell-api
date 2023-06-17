@@ -13,4 +13,10 @@ export class OrdersService extends AbstractService<OrderEntity> {
     super();
     this.setRepository(this.orderRepository);
   }
+
+  async findOne(id: any): Promise<OrderEntity> {
+    return this.orderRepository.findOne({
+      where: { orderId: id },
+    });
+  }
 }

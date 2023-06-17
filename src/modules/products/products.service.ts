@@ -13,4 +13,10 @@ export class ProductsService extends AbstractService<ProductEntity> {
     super();
     this.setRepository(productRepository);
   }
+
+  async findOne(id: any): Promise<ProductEntity> {
+    return this.productRepository.findOne({
+      where: { productId: id },
+    });
+  }
 }

@@ -17,7 +17,7 @@ export abstract class AbstractController<T> {
 
   @Get(':id')
   async findOne(@Param('id') id: number): Promise<T> {
-    return this.service.findOne({ where: { [this.identifierName]: id } });
+    return this.service.findOne(id);
   }
 
   @Delete(':id')
@@ -25,8 +25,8 @@ export abstract class AbstractController<T> {
     return this.service.delete(id);
   }
 
-  abstract create(createDto: any): Promise<T>;
-  abstract update(id: number, updateDto: any): Promise<T>;
+  // abstract create(createDto: any): Promise<T>;
+  // abstract update(id: number, updateDto: any): Promise<T>;
 
   // @Post()
   // @ApiBody(this.getApiBodyOptions()) // Use o método para definir as opções de documentação da API

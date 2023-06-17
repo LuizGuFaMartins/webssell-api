@@ -15,7 +15,7 @@ export class OrdersController extends AbstractController<OrderEntity> {
 
   @Post()
   @ApiBody({ type: OrderInputDTO })
-  async create(@Body() product: OrderInputDTO): Promise<OrderEntity> {
+  async create(@Body() product: OrderInputDTO): Promise<OrderEntity[]> {
     return await this.service.create(product);
   }
 
@@ -23,8 +23,8 @@ export class OrdersController extends AbstractController<OrderEntity> {
   @ApiBody({ type: OrderInputDTO })
   async update(
     @Param('id') id: number,
-    @Body() order: any,
+    @Body() order: OrderInputDTO,
   ): Promise<OrderEntity> {
-    return this.service.update(id, order);
+    return await this.service.update(id, order);
   }
 }

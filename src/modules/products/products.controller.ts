@@ -1,8 +1,8 @@
 import { Body, Controller, Param, Post, Put } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { AbstractController } from 'src/abstracts/controllers/abstract.controller';
+import { ProductInputDTO } from 'src/modules/products/dtos/productsInput.dto';
 import { ProductEntity } from './database/products.entity';
-import { ProductInputDTO } from './dtos/productsInput.dto';
 import { ProductsService } from './products.service';
 @ApiTags('Products')
 @Controller('products')
@@ -14,7 +14,7 @@ export class ProductsController extends AbstractController<ProductEntity> {
 
   @Post()
   @ApiBody({ type: ProductInputDTO })
-  async create(@Body() product: ProductInputDTO): Promise<ProductEntity> {
+  async create(@Body() product: ProductInputDTO): Promise<ProductEntity[]> {
     return await this.productsService.create(product);
   }
 
@@ -22,8 +22,8 @@ export class ProductsController extends AbstractController<ProductEntity> {
   @ApiBody({ type: ProductInputDTO })
   async update(
     @Param('id') id: number,
-    @Body() product: any,
+    @Body() product: ProductInputDTO,
   ): Promise<ProductEntity> {
-    return this.service.update(id, product);
+    return await this.service.update(id, product);
   }
 }

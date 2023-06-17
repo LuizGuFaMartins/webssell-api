@@ -13,4 +13,10 @@ export class ItensService extends AbstractService<ItemEntity> {
     super();
     this.setRepository(itemRepository);
   }
+
+  async findOne(id: any): Promise<ItemEntity> {
+    return this.itemRepository.findOne({
+      where: { itemId: id },
+    });
+  }
 }
