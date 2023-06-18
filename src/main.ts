@@ -1,10 +1,14 @@
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { SocketAdapter } from './gateways/adapter';
 import { MainModule } from './main.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(MainModule);
+  const app = await NestFactory.create(MainModule, { cors: true });
+
+  app.useWebSocketAdapter(new SocketAdapter(app));
+
   const logger: Logger = new Logger('Main');
 
   const config = new DocumentBuilder()

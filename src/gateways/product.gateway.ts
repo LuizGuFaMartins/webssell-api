@@ -1,8 +1,10 @@
 import {
+  ConnectedSocket,
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
 } from '@nestjs/websockets';
+import { Socket } from 'socket.io';
 import { AbstractGateway } from 'src/abstracts/gateways/abstract.gateway';
 import { ProductEntity } from 'src/modules/products/database/products.entity';
 import { ProductInputDTO } from 'src/modules/products/dtos/productsInput.dto';
@@ -19,16 +21,35 @@ export class ProductGateway extends AbstractGateway<ProductEntity> {
   @SubscribeMessage('listProducts')
   list() {
     this.service.findAll().then((itens) => {
-      this.emitGetEvent(itens);
+      this.emitListEvent(itens);
     });
   }
 
   @SubscribeMessage('createProduct')
-  create(@MessageBody() product: ProductInputDTO) {
-    this.productsService.create(product);
-    this.productsService.findAll().then((products) => {
-      this.emitGetEvent(products);
+  create(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() product: ProductInputDTO,
+  ) {
+    this.service.create(product);
+
+    this.service.findAll().then((products) => {
+      client.broadcast.emit('refreshProductsList', [...products, product]);
     });
+
     this.logger.debug(product);
+  }
+
+  @SubscribeMessage('deleteProduct')
+  delete(@ConnectedSocket() client: Socket, @MessageBody() productId: number) {
+    this.service.findAll().then((products) => {
+      const filteredProducts = products.filter(
+        (prod) => prod.productId !== productId,
+      );
+      client.broadcast.emit('refreshProductsList', [...filteredProducts]);
+    });
+
+    this.service.delete(productId);
+
+    this.logger.debug({ deletedProducId: productId });
   }
 }

@@ -19,7 +19,7 @@ export class ItemGateway extends AbstractGateway<ItemEntity> {
   @SubscribeMessage('listItens')
   list() {
     this.service.findAll().then((itens) => {
-      this.emitGetEvent(itens);
+      this.emitListEvent(itens);
     });
   }
 
@@ -27,7 +27,7 @@ export class ItemGateway extends AbstractGateway<ItemEntity> {
   create(@MessageBody() item: ItemInputDTO) {
     this.service.create(item);
     this.service.findAll().then((itens) => {
-      this.emitGetEvent(itens);
+      this.emitListEvent(itens);
     });
     this.logger.debug(item);
   }

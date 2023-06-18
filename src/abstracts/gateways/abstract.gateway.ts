@@ -35,7 +35,7 @@ export class AbstractGateway<T>
     this.server.on('connection', (socket) => {
       this.logger.log(`Connection id: ${socket.id}`);
       this.service.findAll().then((object: any) => {
-        this.emitGetEvent(object);
+        this.emitListEvent(object);
       });
     });
   }
@@ -44,7 +44,7 @@ export class AbstractGateway<T>
     this.logger.log(`Disconnected from ${this.entityName} gateway`);
   }
 
-  emitGetEvent(object) {
+  emitListEvent(object) {
     this.server.emit(this.getMethodName, object);
   }
 }
