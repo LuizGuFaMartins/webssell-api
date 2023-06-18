@@ -1,7 +1,7 @@
 import { OrderEntity } from 'src/modules/orders/database/orders.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity({ name: 'clients' })
 export class ClientEntity {
   @PrimaryGeneratedColumn()
   clientId: number;

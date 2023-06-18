@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 import { OrderStatus } from '../enums/order-status.enum';
 
-@Entity()
+@Entity({ name: 'orders' })
 export class OrderEntity {
   @PrimaryGeneratedColumn()
   orderId: number;

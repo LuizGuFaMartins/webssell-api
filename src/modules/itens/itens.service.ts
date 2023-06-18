@@ -19,4 +19,12 @@ export class ItensService extends AbstractService<ItemEntity> {
       where: { itemId: id },
     });
   }
+
+  async findAll(): Promise<ItemEntity[]> {
+    return await this.itemRepository.find({
+      relations: {
+        product: true,
+      },
+    });
+  }
 }

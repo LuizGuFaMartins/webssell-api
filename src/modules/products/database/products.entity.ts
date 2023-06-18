@@ -1,7 +1,7 @@
 import { ItemEntity } from 'src/modules/itens/database/itens.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity({ name: 'products' })
 export class ProductEntity {
   @PrimaryGeneratedColumn()
   productId: number;
