@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Put } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { AbstractController } from 'src/abstracts/controllers/abstract.controller';
 import { OrderEntity } from './database/orders.entity';
@@ -28,8 +28,25 @@ export class OrdersController extends AbstractController<OrderEntity> {
     return await this.service.update(id, order);
   }
 
+  @Patch('finish-order/:id')
+  async finishOrder(@Param('id') id: number): Promise<OrderEntity> {
+    return await this.ordersService.finishOrder(id);
+  }
+
   @Get('/find-per-client/:id')
   async findPerClient(@Param('id') id: number): Promise<OrderEntity[]> {
     return this.ordersService.findPerClientId(id);
+  }
+
+  @Get('/find-open-order')
+  async findOpenOrderPerClient(
+    @Param('id') id: number,
+  ): Promise<OrderEntity[]> {
+    return this.ordersService.findOpenOrderPerClientId(id);
+  }
+
+  @Get('/find-open-order')
+  async findOpenOrder(): Promise<OrderEntity[]> {
+    return this.ordersService.findOpenOrders();
   }
 }

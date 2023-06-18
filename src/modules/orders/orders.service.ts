@@ -1,12 +1,11 @@
 import { Injectable, UseInterceptors } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { plainToInstance } from 'class-transformer';
 import { TransformerInterceptor } from 'nestjs-class-transformer';
 import { AbstractService } from 'src/abstracts/services/abstract.service';
 import { Repository } from 'typeorm';
 import { ClientsService } from '../clients/clients.service';
 import { OrderEntity } from './database/orders.entity';
-import { OrderInputDTO } from './dtos/ordersInput.dto';
+import { OrderStatus } from './enums/order-status.enum';
 
 @UseInterceptors(TransformerInterceptor)
 @Injectable()
@@ -29,14 +28,30 @@ export class OrdersService extends AbstractService<OrderEntity> {
     });
   }
 
-  // async createOrder(orderInputDTO: OrderInputDTO): Promise<OrderEntity> {
-  //   const entity = plainToInstance(OrderEntity, orderInputDTO);
-  //   return await this.repository.save(entity);
-  // }
+  async finishOrder(id: number): Promise<OrderEntity> {
+    const order: OrderEntity = await this.findOne(id);
+    order.orderStatus = OrderStatus.FINISHED;
+    this.create({
+      clientId: order.clientId,
+    });
+    return await this.update(id, order);
+  }
 
   async findPerClientId(id: any): Promise<OrderEntity[]> {
     return this.orderRepository.find({
       where: { clientId: id },
+    });
+  }
+
+  async findOpenOrders(): Promise<OrderEntity[]> {
+    return this.orderRepository.find({
+      where: { orderStatus: 'OPEN' },
+    });
+  }
+
+  async findOpenOrderPerClientId(id: any): Promise<OrderEntity[]> {
+    return this.orderRepository.find({
+      where: { clientId: id, orderStatus: 'OPEN' },
     });
   }
 }
