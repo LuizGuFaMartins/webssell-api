@@ -19,17 +19,15 @@ export class OrdersService extends AbstractService<OrderEntity> {
     this.setRepository(this.orderRepository);
   }
 
-  async findOne(id: any): Promise<OrderEntity> {
-    return this.orderRepository.findOne({
+  async findOne(id: number): Promise<OrderEntity> {
+    return await this.orderRepository.findOne({
       where: { orderId: id },
-      relations: {
-        itens: true,
-      },
     });
   }
 
   async finishOrder(id: number): Promise<OrderEntity> {
     const order: OrderEntity = await this.findOne(id);
+
     order.orderStatus = OrderStatus.FINISHED;
     this.create({
       clientId: order.clientId,

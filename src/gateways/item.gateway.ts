@@ -7,7 +7,7 @@ import {
 import { Socket } from 'socket.io';
 import { AbstractGateway } from 'src/abstracts/gateways/abstract.gateway';
 import { ItemEntity } from 'src/modules/itens/database/itens.entity';
-import { ItemInputDTO } from 'src/modules/itens/dtos/itensInput.dto';
+import { ItensInputWithClientDTO } from 'src/modules/itens/dtos/itensInputWithClient.dto';
 import { ItensService } from 'src/modules/itens/itens.service';
 
 @WebSocketGateway()
@@ -18,18 +18,30 @@ export class ItemGateway extends AbstractGateway<ItemEntity> {
     this.setGetMethodName('refreshItensList');
   }
 
+  onModuleInit() {
+    this.server.on('connection', (socket) => {
+      this.logger.log(`Connection id: ${socket.id}`);
+      this.itensService.findPerOpenOrderClientId(1).then((object: any) => {
+        this.emitListEvent(object);
+      });
+    });
+  }
+
   @SubscribeMessage('listItens')
   list() {
-    this.service.findAll().then((itens) => {
+    this.itensService.findPerOpenOrderClientId(1).then((itens) => {
       this.emitListEvent(itens);
     });
   }
 
   @SubscribeMessage('createItem')
-  create(@ConnectedSocket() client: Socket, @MessageBody() item: ItemInputDTO) {
-    this.service.create(item);
+  create(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() item: ItensInputWithClientDTO,
+  ) {
+    this.itensService.createWithOpenOrder(item);
 
-    this.service.findAll().then((itens) => {
+    this.itensService.findPerOpenOrderClientId(1).then((itens) => {
       client.broadcast.emit('refreshItensList', [...itens, item]);
     });
 
@@ -38,7 +50,7 @@ export class ItemGateway extends AbstractGateway<ItemEntity> {
 
   @SubscribeMessage('deleteItem')
   delete(@ConnectedSocket() client: Socket, @MessageBody() productId: number) {
-    this.service.findAll().then((itens) => {
+    this.itensService.findPerOpenOrderClientId(1).then((itens) => {
       const filteredItens = itens.filter(
         (prod) => prod.productId !== productId,
       );

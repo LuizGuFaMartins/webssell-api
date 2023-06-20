@@ -35,12 +35,12 @@ export class OrdersController extends AbstractController<OrderEntity> {
 
   @Get('/find-per-client/:id')
   async findPerClient(@Param('id') id: number): Promise<OrderEntity[]> {
-    return this.ordersService.findPerClientId(id);
+    return await this.ordersService.findPerClientId(id);
   }
 
-  @Get('/find-open-order')
+  @Get('/find-open-order/:clientId')
   async findOpenOrderPerClient(
-    @Param('id') id: number,
+    @Param('clientId') id: number,
   ): Promise<OrderEntity[]> {
     return this.ordersService.findOpenOrderPerClientId(id);
   }
