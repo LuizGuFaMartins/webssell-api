@@ -1,10 +1,14 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { OrderEntity } from 'src/modules/orders/database/orders.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity({ name: 'clients' })
 export class ClientEntity {
-    @PrimaryGeneratedColumn()
-    clientId: number;
+  @PrimaryGeneratedColumn()
+  clientId: number;
 
-    @Column()
-    clientName: string;
+  @Column()
+  clientName: string;
+
+  @OneToMany(() => OrderEntity, (order) => order.clientId)
+  orders: OrderEntity[];
 }
