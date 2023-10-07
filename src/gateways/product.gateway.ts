@@ -56,7 +56,7 @@ export class ProductGateway extends AbstractGateway<ProductEntity> {
       const filteredItens = itens.filter(
         (item) => item.productId !== productId,
       );
-      client.broadcast.emit('refreshItensLIst', [...filteredItens]);
+      client.broadcast.emit('refreshItensList', [...filteredItens]);
     });
 
     this.itensService.findPerProductId(productId).then((itens) => {

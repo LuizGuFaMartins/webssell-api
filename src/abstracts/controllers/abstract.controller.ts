@@ -24,19 +24,4 @@ export abstract class AbstractController<T> {
   async delete(@Param('id') id: number): Promise<void> {
     return this.service.delete(id);
   }
-
-  // abstract create(createDto: any): Promise<T>;
-  // abstract update(id: number, updateDto: any): Promise<T>;
-
-  // @Post()
-  // @ApiBody(this.getApiBodyOptions()) // Use o método para definir as opções de documentação da API
-  // async create(@Body() createDto: any): Promise<T> {
-  //   return this.service.create(createDto);
-  // }
-
-  // @Put(':id')
-  // @ApiBody(this.getApiBodyOptions()) // Use o método para definir as opções de documentação da API
-  // async update(@Param('id') id: number, @Body() updateDto: any): Promise<T> {
-  //   return this.service.update(id, updateDto);
-  // }
 }
