@@ -17,7 +17,6 @@ async function bootstrap() {
       'This is an API that implements websockets for communication between the client and the server.',
     )
     .setVersion('1.0')
-    .addTag('Webssell')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger', app, document);
