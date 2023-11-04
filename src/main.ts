@@ -3,8 +3,11 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { SocketAdapter } from './gateways/adapter';
 import { MainModule } from './main.module';
+import * as dotenv from 'dotenv';
 
 async function bootstrap() {
+  
+  dotenv.config();
   const app = await NestFactory.create(MainModule, { cors: true });
 
   app.useWebSocketAdapter(new SocketAdapter(app));
