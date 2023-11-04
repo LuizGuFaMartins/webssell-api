@@ -6,14 +6,14 @@ import { ItensModule } from './modules/itens/itens.module';
 import { OrdersModule } from './modules/orders/orders.module';
 import { ProductsModule } from './modules/products/products.module';
 import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
+// import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
-    ClientsModule,
     ProductsModule,
     OrdersModule,
     ItensModule,
+    ClientsModule,
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'db',
@@ -22,7 +22,7 @@ import { UsersModule } from './users/users.module';
     }),
     GatewayModule,
     AuthModule,
-    UsersModule,
+    // UsersModule,
   ],
   controllers: [],
   providers: [],

@@ -11,7 +11,6 @@ import {
 // import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 
-//finalidade de teste só, não utilizada
 @Controller('auth')
 export  class AuthController {
   constructor(private authService: AuthService) { }
@@ -19,10 +18,10 @@ export  class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('login')
   async signIn(@Body() signInDto: Record<string, any>) {
-    return {token: await this.authService.signIn(signInDto.username, signInDto.password)};
+    return {token: await this.authService.signIn(signInDto.clientEmail, signInDto.clientPassword)};
   }
 
-  
+  //finalidade de teste só, não utilizada
   // @UseGuards(AuthGuard)
   // @Get('profile')
   // getProfile(@Request() req) {
