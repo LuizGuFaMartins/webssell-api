@@ -6,4 +6,10 @@ export class ClientDTO {
 
   @ApiProperty()
   clientName: string;
+
+  @ApiProperty()
+  clientEmail: string;
+
+  @ApiProperty()
+  clientPassword: string;
 }
