@@ -11,7 +11,7 @@ import { AuthService } from './auth.service';
     JwtModule.register({
       global: true,
       secret: "" + process.env.jwtSecret,
-      signOptions: { expiresIn: '10m' },
+      signOptions: { expiresIn: '1h' },
     }),
     TypeOrmModule.forFeature([ClientEntity]),
   ],
