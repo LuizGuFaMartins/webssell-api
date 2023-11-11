@@ -15,12 +15,11 @@ export class PaymentsService extends AbstractService<PaymentEntity> {
   }
 
   async findPerClientId(id: any): Promise<PaymentEntity[]> {
-    
     return this.paymentRepository.find({
       where: { clientId: id },
     });
   }
-
+  
   async findOne(id: any): Promise<PaymentEntity> {
     return this.paymentRepository.findOne({
       where: { paymentId: id },

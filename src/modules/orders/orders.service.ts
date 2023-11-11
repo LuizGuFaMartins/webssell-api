@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { ClientsService } from '../clients/clients.service';
 import { OrderEntity } from './database/orders.entity';
 import { OrderStatus } from './enums/order-status.enum';
+import { UUID } from 'typeorm/driver/mongodb/bson.typings';
 @UseInterceptors(TransformerInterceptor)
 @Injectable()
 export class OrdersService extends AbstractService<OrderEntity> {
@@ -28,7 +29,7 @@ export class OrdersService extends AbstractService<OrderEntity> {
 
   async finishOrder(id: number): Promise<OrderEntity> {
     let order: OrderEntity = await this.findOne(id);
-    const clientIdString = order.clientId.toString();
+    const uidd = UUID.generate();
     order.orderStatus = OrderStatus.FINISHED;
     this.create({
       clientId: order.clientId,
@@ -36,7 +37,7 @@ export class OrdersService extends AbstractService<OrderEntity> {
     order = await this.update(id, order);
 
     const message: any = {
-      id: clientIdString,
+      id: uidd,
       body: {
         clientId: order.clientId,
         orderId: order.orderId,

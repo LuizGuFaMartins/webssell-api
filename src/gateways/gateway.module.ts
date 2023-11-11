@@ -10,6 +10,9 @@ import { ProductEntity } from 'src/modules/products/database/products.entity';
 import { ProductsService } from 'src/modules/products/products.service';
 import { ItemGateway } from './item.gateway';
 import { ProductGateway } from './product.gateway';
+import { PaymentEntity } from 'src/modules/payments/database/payments.entity';
+import { PaymentGateway } from './payment.gateway';
+import { PaymentsService } from 'src/modules/payments/payments.service';
 
 @Module({
   imports: [
@@ -18,6 +21,7 @@ import { ProductGateway } from './product.gateway';
       ItemEntity,
       ClientEntity,
       OrderEntity,
+      PaymentEntity,
     ]),
   ],
   providers: [
@@ -27,6 +31,8 @@ import { ProductGateway } from './product.gateway';
     ItensService,
     OrdersService,
     ClientsService,
+    PaymentGateway,
+    PaymentsService,
   ],
 })
 export class GatewayModule {}

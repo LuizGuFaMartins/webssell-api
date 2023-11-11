@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class PaymentDTO {
   @ApiProperty()
-  paymentId: number;
+  paymentId: string;
 
   @ApiProperty()
   paymentName: string;
@@ -17,7 +17,10 @@ export class PaymentDTO {
   paymentKey: string;
 
   @ApiProperty()
-  paymentQrcode: string;
+  paymentQrCode: string;
+
+  @ApiProperty()
+  paymentCreatedAt: Date;
 
   @ApiProperty()
   clientId: number;

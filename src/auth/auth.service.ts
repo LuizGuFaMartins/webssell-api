@@ -17,6 +17,7 @@ export class AuthService {
     const payload = { clientId: client.clientId, clientName: client.clientName, clientEmail: client.clientEmail, clientPassword: client.clientPassword };
     return {
       access_token: await this.jwtService.signAsync(payload),
+      clientId: client.clientId
     };
   }
 }

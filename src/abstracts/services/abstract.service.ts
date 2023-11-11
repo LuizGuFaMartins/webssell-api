@@ -30,10 +30,11 @@ export abstract class AbstractService<T> {
     return this.repository.save(entity);
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: any): Promise<void> {
     const result = await this.repository.delete(id);
     if (result.affected === 0) {
       throw new NotFoundException(`Entity with id ${id} not found`);
     }
   }
+
 }
