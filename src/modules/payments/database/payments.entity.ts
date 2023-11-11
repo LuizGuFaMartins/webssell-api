@@ -1,13 +1,18 @@
 import { ClientEntity } from 'src/modules/clients/database/clients.entity';
-import { ItemEntity } from 'src/modules/itens/database/itens.entity';
 import { OrderEntity } from 'src/modules/orders/database/orders.entity';
 
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity({ name: 'payments' })
 export class PaymentEntity {
   @PrimaryGeneratedColumn()
-  paymentId: number;
+  paymentId: string;
 
   @Column()
   paymentName: string;
@@ -19,13 +24,13 @@ export class PaymentEntity {
   paymentPrice: number;
 
   @Column()
-  paymentstatus: string;
+  paymentStatus: string;
 
   @Column()
-  paymentqrcode: string;
+  paymentQrCode: string;
 
   @Column()
-  paymenttimestamp: number;
+  paymentCreatedAt: Date;
 
   @Column()
   clientId: number;

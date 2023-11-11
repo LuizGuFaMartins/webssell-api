@@ -17,7 +17,13 @@ export class PaymentInputDTO {
   paymentKey: string;
 
   @ApiProperty()
-  paymentQrcode: string;
+  paymentStatus: string;
+
+  @ApiProperty()
+  paymentQrCode: string;
+
+  @ApiProperty()
+  paymentCreatedAt: Date;
 
   @ApiProperty()
   clientId: number;

@@ -1,17 +1,16 @@
 import { Injectable, UseInterceptors } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { SqsService } from '@ssut/nestjs-sqs';
 import { TransformerInterceptor } from 'nestjs-class-transformer';
 import { AbstractService } from 'src/abstracts/services/abstract.service';
 import { Repository } from 'typeorm';
 import { ClientsService } from '../clients/clients.service';
 import { OrderEntity } from './database/orders.entity';
 import { OrderStatus } from './enums/order-status.enum';
-import { SqsService } from '@ssut/nestjs-sqs';
 @UseInterceptors(TransformerInterceptor)
 @Injectable()
 export class OrdersService extends AbstractService<OrderEntity> {
   constructor(
-    
     private readonly sqsService: SqsService,
     @InjectRepository(OrderEntity)
     private orderRepository: Repository<OrderEntity>,
@@ -36,29 +35,32 @@ export class OrdersService extends AbstractService<OrderEntity> {
     });
     order = await this.update(id, order);
 
-    const message : any = {
-        id:clientIdString,
-        body: {"calendario": {
-          "expiracao": 3600
+    const message: any = {
+      id: clientIdString,
+      body: {
+        clientId: order.clientId,
+        orderId: order.orderId,
+        calendario: {
+          expiracao: 3600,
         },
-        "devedor": {
-          "cpf": "43856478876",
-          "nome": "Luiz Gustavo Farabello Martins"
+        devedor: {
+          cpf: '43856478876',
+          nome: 'Luiz Gustavo Farabello Martins',
         },
-        "valor": {
-          "original": "0.01"
+        valor: {
+          original: '0.01',
         },
-        "chave": "2c3e3c57-7fcd-4c94-a05d-57cf87a2d5f1",
-        "solicitacaoPagador": "Cobrança dos serviços prestados."}
-    }
+        chave: '2c3e3c57-7fcd-4c94-a05d-57cf87a2d5f1',
+        solicitacaoPagador: 'Cobrança dos serviços prestados.',
+      },
+    };
     try {
-      await this.sqsService.send("webssell-queue", message );
+      await this.sqsService.send(process.env.QUEUE_NAME, message);
       return order;
     } catch (error) {
-      console.log(error)
-      throw (error)
+      console.log(error);
+      throw error;
     }
-
   }
 
   async findPerClientId(id: any): Promise<OrderEntity[]> {
