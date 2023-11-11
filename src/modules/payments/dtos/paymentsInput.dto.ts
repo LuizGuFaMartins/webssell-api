@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class PaymentInputDTO {
   @ApiProperty()
-  paymentId: number;
+  paymentId: string;
 
   @ApiProperty()
   paymentName: string;

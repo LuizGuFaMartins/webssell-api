@@ -6,12 +6,13 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity({ name: 'payments' })
 export class PaymentEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   paymentId: string;
 
   @Column()
@@ -21,7 +22,7 @@ export class PaymentEntity {
   paymentCpf: string;
 
   @Column()
-  paymentPrice: number;
+  paymentPrice: string;
 
   @Column()
   paymentStatus: string;
