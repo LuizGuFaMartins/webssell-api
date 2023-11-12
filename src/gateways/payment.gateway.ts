@@ -22,9 +22,10 @@ export class PaymentGateway extends AbstractGateway<PaymentEntity> {
   }
 
   @SubscribeMessage('listPayments')
-  list(@MessageBody() paymentId: number) {
-    this.paymentsService.findPerClientId(paymentId).then((payment) => {
-      this.emitListEvent(payment);
+  list(@ConnectedSocket() client: Socket, @MessageBody() paymentId: number) {
+    this.paymentsService.findPerClientId(paymentId).then((payments) => {
+      // this.emitListEvent(payment);
+      client.broadcast.emit('refreshPaymentsList', [...payments]);
     });
   }
 
