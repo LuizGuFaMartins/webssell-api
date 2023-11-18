@@ -27,10 +27,11 @@ export class OrdersService extends AbstractService<OrderEntity> {
     });
   }
 
-  async finishOrder(id: number): Promise<OrderEntity> {
+  async finishOrder(id: number, orderTotalPrice: number): Promise<OrderEntity> {
     let order: OrderEntity = await this.findOne(id);
     const uidd = uuidv4();
     order.orderStatus = OrderStatus.FINISHED;
+    order.orderTotalPrice = orderTotalPrice;
     this.create({
       clientId: order.clientId,
     });
@@ -50,7 +51,7 @@ export class OrdersService extends AbstractService<OrderEntity> {
           nome: client.clientName,
         },
         valor: {
-          original: order.orderTotalPrice,
+          original: order.orderTotalPrice.toString(),
         },
         chave: process.env.PIX_KEY.toString(),
         solicitacaoPagador: 'Cobrança para finalizar o pedido',
