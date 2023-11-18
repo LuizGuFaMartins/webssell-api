@@ -4,10 +4,10 @@ import { SqsService } from '@ssut/nestjs-sqs';
 import { TransformerInterceptor } from 'nestjs-class-transformer';
 import { AbstractService } from 'src/abstracts/services/abstract.service';
 import { Repository } from 'typeorm';
+import { v4 as uuidv4 } from 'uuid';
 import { ClientsService } from '../clients/clients.service';
 import { OrderEntity } from './database/orders.entity';
 import { OrderStatus } from './enums/order-status.enum';
-import { v4 as uuidv4 } from 'uuid';
 @UseInterceptors(TransformerInterceptor)
 @Injectable()
 export class OrdersService extends AbstractService<OrderEntity> {
@@ -35,6 +35,7 @@ export class OrdersService extends AbstractService<OrderEntity> {
       clientId: order.clientId,
     });
     order = await this.update(id, order);
+    const client = await this.clientsService.findOne(order.clientId);
 
     const message: any = {
       id: uidd,
@@ -42,17 +43,17 @@ export class OrdersService extends AbstractService<OrderEntity> {
         clientId: order.clientId,
         orderId: order.orderId,
         calendario: {
-          expiracao: 3600,
+          expiracao: process.env.CHARGE_EXPIRATION,
         },
         devedor: {
           cpf: '43856478876',
-          nome: 'Luiz Gustavo Farabello Martins',
+          nome: client.clientName,
         },
         valor: {
-          original: '0.01',
+          original: order.orderTotalPrice,
         },
-        chave: '2c3e3c57-7fcd-4c94-a05d-57cf87a2d5f1',
-        solicitacaoPagador: 'Cobrança dos serviços prestados.',
+        chave: process.env.PIX_KEY.toString(),
+        solicitacaoPagador: 'Cobrança para finalizar o pedido',
       },
     };
     try {

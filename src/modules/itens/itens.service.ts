@@ -40,21 +40,31 @@ export class ItensService extends AbstractService<ItemEntity> {
 
   async findPerOpenOrderClientId(clientId: any): Promise<ItemEntity[]> {
     const orders = await this.ordersService.findOpenOrderPerClientId(clientId);
-    const itens = await this.itemRepository.find({
-      where: { orderId: orders[0].orderId },
-      relations: {
-        product: true,
-      },
-    });
-    return itens;
+    let itens;
+    if (orders.length > 0) {
+      itens = await this.itemRepository.find({
+        where: { orderId: orders[0].orderId },
+        relations: {
+          product: true,
+        },
+      });
+    }
+    return itens || [];
   }
 
   async createWithOpenOrder(
     itemInputDTO: ItensInputWithClientDTO,
   ): Promise<ItemEntity> {
     const entity = await this.repository.create(itemInputDTO);
-    const order: OrderEntity[] =
+    let order: OrderEntity[] =
       await this.ordersService.findOpenOrderPerClientId(itemInputDTO.clientId);
+
+    if (!order || order.length === 0) {
+      order = await this.ordersService.create({
+        clientId: itemInputDTO.clientId,
+      });
+    }
+
     entity.orderId = order[0].orderId;
     const savedEntity = await this.repository.save(entity);
     return savedEntity;

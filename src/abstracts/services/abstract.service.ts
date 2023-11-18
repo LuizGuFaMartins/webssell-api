@@ -36,5 +36,4 @@ export abstract class AbstractService<T> {
       throw new NotFoundException(`Entity with id ${id} not found`);
     }
   }
-
 }

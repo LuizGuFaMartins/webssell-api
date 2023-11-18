@@ -21,15 +21,13 @@ export class ItemGateway extends AbstractGateway<ItemEntity> {
   onModuleInit() {
     this.server.on('connection', (socket) => {
       this.logger.log(`Connection id: ${socket.id}`);
-      this.itensService.findPerOpenOrderClientId(1).then((object: any) => {
-        this.emitListEvent(object);
-      });
     });
   }
 
   @SubscribeMessage('listItens')
-  list() {
-    this.itensService.findPerOpenOrderClientId(1).then((itens) => {
+  list(client, payload: { clientId: number }) {
+    const clientId = payload.clientId;
+    this.itensService.findPerOpenOrderClientId(clientId).then((itens) => {
       this.emitListEvent(itens);
     });
   }
@@ -41,7 +39,7 @@ export class ItemGateway extends AbstractGateway<ItemEntity> {
   ) {
     this.itensService.createWithOpenOrder(item);
 
-    this.itensService.findPerOpenOrderClientId(1).then((itens) => {
+    this.itensService.findPerOpenOrderClientId(item.clientId).then((itens) => {
       client.broadcast.emit('refreshItensList', [...itens, item]);
     });
 
@@ -49,16 +47,21 @@ export class ItemGateway extends AbstractGateway<ItemEntity> {
   }
 
   @SubscribeMessage('deleteItem')
-  delete(@ConnectedSocket() client: Socket, @MessageBody() productId: number) {
-    this.itensService.findPerOpenOrderClientId(1).then((itens) => {
-      const filteredItens = itens.filter(
-        (prod) => prod.productId !== productId,
-      );
-      client.broadcast.emit('refreshItensList', [...filteredItens]);
-    });
+  delete(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() payload: { productId: number; clientId: number },
+  ) {
+    this.itensService
+      .findPerOpenOrderClientId(payload.clientId)
+      .then((itens) => {
+        const filteredItens = itens.filter(
+          (prod) => prod.productId !== payload.productId,
+        );
+        client.broadcast.emit('refreshItensList', [...filteredItens]);
+      });
 
-    this.service.delete(productId);
+    this.service.delete(payload.productId);
 
-    this.logger.debug({ deletedProducId: productId });
+    this.logger.debug({ deletedProducId: payload.productId });
   }
 }

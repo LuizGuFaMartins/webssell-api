@@ -10,22 +10,27 @@ import { PaymentEntity } from 'src/modules/payments/database/payments.entity';
 import { PaymentInputDTO } from 'src/modules/payments/dtos/paymentsInput.dto';
 import { PaymentsService } from 'src/modules/payments/payments.service';
 
-
 @WebSocketGateway()
 export class PaymentGateway extends AbstractGateway<PaymentEntity> {
-  constructor(
-    private readonly paymentsService: PaymentsService,
-  ) {
+  constructor(private readonly paymentsService: PaymentsService) {
     super(paymentsService);
     this.setEntityName('Payment');
     this.setGetMethodName('refreshPaymentsList');
   }
 
+  onModuleInit() {
+    this.server.on('connection', (socket) => {
+      this.logger.log(`Connection id: ${socket.id}`);
+    });
+  }
+
   @SubscribeMessage('listPayments')
-  list(@ConnectedSocket() client: Socket, @MessageBody() paymentId: number) {
-    this.paymentsService.findPerClientId(paymentId).then((payments) => {
-      // this.emitListEvent(payment);
-      client.broadcast.emit('refreshPaymentsList', [...payments]);
+  list(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() payload: { clientId: number },
+  ) {
+    this.paymentsService.findPerClientId(payload.clientId).then((payments) => {
+      this.emitListEvent(payments);
     });
   }
 
@@ -44,16 +49,19 @@ export class PaymentGateway extends AbstractGateway<PaymentEntity> {
   }
 
   @SubscribeMessage('deletePayment')
-  delete(@ConnectedSocket() client: Socket, @MessageBody() paymentId: string) {
-    this.paymentsService.findPerClientId(1).then((payment) => {
+  delete(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() payload: { paymentId: string; clientId: number },
+  ) {
+    this.paymentsService.findPerClientId(payload.clientId).then((payment) => {
       const filteredItens = payment.filter(
-        (pay) => pay.paymentId !== paymentId,
+        (pay) => pay.paymentId !== payload.paymentId,
       );
       client.broadcast.emit('refreshItensList', [...filteredItens]);
     });
 
-    this.service.delete(paymentId);
+    this.service.delete(payload.paymentId);
 
-    this.logger.debug({ deletedPaymentId: paymentId });
+    this.logger.debug({ deletedPaymentId: payload.paymentId });
   }
 }

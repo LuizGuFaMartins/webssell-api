@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Patch, Post, Put } from '@nestjs/common';
+import { Body, Controller, Param, Post, Put } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { AbstractController } from 'src/abstracts/controllers/abstract.controller';
 import { ClientsService } from './clients.service';
@@ -16,7 +16,6 @@ export class ClientsController extends AbstractController<ClientEntity> {
   @Post('cadastro')
   @ApiBody({ type: ClientInputDTO })
   async create(@Body() client: ClientInputDTO): Promise<ClientEntity[]> {
-    console.log("backend" + client.clientName);
     return await this.clientsService.create(client);
   }
 
