@@ -5,7 +5,6 @@ import { ClientEntity } from '../clients/database/clients.entity';
 import { OrderEntity } from './database/orders.entity';
 import { OrdersController } from './orders.controller';
 import { OrdersService } from './orders.service';
-
 @Module({
   imports: [TypeOrmModule.forFeature([OrderEntity, ClientEntity])],
   controllers: [OrdersController],

@@ -1,4 +1,5 @@
 import { OrderEntity } from 'src/modules/orders/database/orders.entity';
+import { PaymentEntity } from 'src/modules/payments/database/payments.entity';
 import { ProductEntity } from 'src/modules/products/database/products.entity';
 import {
   Column,
@@ -32,4 +33,5 @@ export class ItemEntity {
   @ManyToOne(() => OrderEntity, (order) => order.itens)
   @JoinColumn({ name: 'orderId', referencedColumnName: 'orderId' })
   order: OrderEntity;
+
 }

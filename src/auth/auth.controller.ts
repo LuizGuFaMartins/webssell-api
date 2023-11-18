@@ -1,0 +1,30 @@
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Request,
+  UseGuards
+} from '@nestjs/common';
+// import { AuthGuard } from './auth.guard';
+import { AuthService } from './auth.service';
+
+@Controller('auth')
+export  class AuthController {
+  constructor(private authService: AuthService) { }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('login')
+  async signIn(@Body() signInDto: Record<string, any>) {
+    return {token: await this.authService.signIn(signInDto.clientEmail, signInDto.clientPassword)};
+  }
+
+  //finalidade de teste só, não utilizada
+  // @UseGuards(AuthGuard)
+  // @Get('profile')
+  // getProfile(@Request() req) {
+  //   return req.user;
+  // }
+}

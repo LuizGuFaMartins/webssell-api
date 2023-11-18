@@ -1,16 +1,18 @@
 import { Injectable, UseInterceptors } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { SqsService } from '@ssut/nestjs-sqs';
 import { TransformerInterceptor } from 'nestjs-class-transformer';
 import { AbstractService } from 'src/abstracts/services/abstract.service';
 import { Repository } from 'typeorm';
 import { ClientsService } from '../clients/clients.service';
 import { OrderEntity } from './database/orders.entity';
 import { OrderStatus } from './enums/order-status.enum';
-
+import { v4 as uuidv4 } from 'uuid';
 @UseInterceptors(TransformerInterceptor)
 @Injectable()
 export class OrdersService extends AbstractService<OrderEntity> {
   constructor(
+    private readonly sqsService: SqsService,
     @InjectRepository(OrderEntity)
     private orderRepository: Repository<OrderEntity>,
     private clientsService: ClientsService,
@@ -26,13 +28,40 @@ export class OrdersService extends AbstractService<OrderEntity> {
   }
 
   async finishOrder(id: number): Promise<OrderEntity> {
-    const order: OrderEntity = await this.findOne(id);
-
+    let order: OrderEntity = await this.findOne(id);
+    const uidd = uuidv4();
     order.orderStatus = OrderStatus.FINISHED;
     this.create({
       clientId: order.clientId,
     });
-    return await this.update(id, order);
+    order = await this.update(id, order);
+
+    const message: any = {
+      id: uidd,
+      body: {
+        clientId: order.clientId,
+        orderId: order.orderId,
+        calendario: {
+          expiracao: 3600,
+        },
+        devedor: {
+          cpf: '43856478876',
+          nome: 'Luiz Gustavo Farabello Martins',
+        },
+        valor: {
+          original: '0.01',
+        },
+        chave: '2c3e3c57-7fcd-4c94-a05d-57cf87a2d5f1',
+        solicitacaoPagador: 'Cobrança dos serviços prestados.',
+      },
+    };
+    try {
+      await this.sqsService.send(process.env.QUEUE_NAME, message);
+      return order;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   }
 
   async findPerClientId(id: any): Promise<OrderEntity[]> {

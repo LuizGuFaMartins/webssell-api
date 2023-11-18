@@ -9,6 +9,12 @@ export class ClientEntity {
   @Column()
   clientName: string;
 
+  @Column()
+  clientEmail: string;
+
+  @Column()
+  clientPassword: string;
+
   @OneToMany(() => OrderEntity, (order) => order.clientId)
   orders: OrderEntity[];
 }

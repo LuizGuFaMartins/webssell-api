@@ -19,4 +19,11 @@ export class ClientsService extends AbstractService<ClientEntity> {
       where: { clientId: id },
     });
   }
+
+  async findOneByEmail(clientEmail: string): Promise<ClientEntity> {
+      return this.clientRepository.findOne({
+        where: {clientEmail: clientEmail}
+      })
+  }
+
 }
