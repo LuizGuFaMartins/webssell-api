@@ -47,11 +47,11 @@ export class OrdersService extends AbstractService<OrderEntity> {
           expiracao: process.env.CHARGE_EXPIRATION,
         },
         devedor: {
-          cpf: '43856478876',
+          cpf: client.clientCpf,
           nome: client.clientName,
         },
         valor: {
-          original: order.orderTotalPrice.toString(),
+          original: order.orderTotalPrice.toFixed(2).toString(),
         },
         chave: process.env.PIX_KEY.toString(),
         solicitacaoPagador: 'Cobrança para finalizar o pedido',

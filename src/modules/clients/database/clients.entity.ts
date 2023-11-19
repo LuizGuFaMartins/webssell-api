@@ -10,6 +10,9 @@ export class ClientEntity {
   clientName: string;
 
   @Column()
+  clientCpf: string;
+
+  @Column()
   clientEmail: string;
 
   @Column()

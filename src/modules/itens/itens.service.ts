@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AbstractService } from 'src/abstracts/services/abstract.service';
 import { Repository } from 'typeorm';
-import { OrderEntity } from './../orders/database/orders.entity';
 import { OrdersService } from './../orders/orders.service';
 import { ItemEntity } from './database/itens.entity';
 import { ItensInputWithClientDTO } from './dtos/itensInputWithClient.dto';
@@ -56,8 +55,9 @@ export class ItensService extends AbstractService<ItemEntity> {
     itemInputDTO: ItensInputWithClientDTO,
   ): Promise<ItemEntity> {
     const entity = await this.repository.create(itemInputDTO);
-    let order: OrderEntity[] =
-      await this.ordersService.findOpenOrderPerClientId(itemInputDTO.clientId);
+    let order: any = await this.ordersService.findOpenOrderPerClientId(
+      itemInputDTO.clientId,
+    );
 
     if (!order || order.length === 0) {
       order = await this.ordersService.create({
@@ -65,7 +65,7 @@ export class ItensService extends AbstractService<ItemEntity> {
       });
     }
 
-    entity.orderId = order[0].orderId;
+    entity.orderId = order.length > 0 ? order[0].orderId : order.orderId;
     const savedEntity = await this.repository.save(entity);
     return savedEntity;
   }

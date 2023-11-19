@@ -8,5 +8,8 @@ export class ClientInputDTO {
   clientEmail: string;
 
   @ApiProperty()
+  clientCpf: string;
+
+  @ApiProperty()
   clientPassword: string;
 }

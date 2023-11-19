@@ -8,6 +8,9 @@ export class ClientDTO {
   clientName: string;
 
   @ApiProperty()
+  clientCpf: string;
+
+  @ApiProperty()
   clientEmail: string;
 
   @ApiProperty()
